@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import Image from "next/image";
 import React from "react";
-import rickImageSrc from "./../../../public/rick_and_morty.png";
+import rickImageSrc from "/public/rick_and_morty.png";
 import styles from "./Rick.module.css";
 
 const Rick = () => {

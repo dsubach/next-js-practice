@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import Image from "next/image";
 import React from "react";
 import styles from "./Loader.module.css";
-import rickImageSrc from "./../../../public/loader.png";
+import rickImageSrc from "/public/loader.png";
 
 const Loader = ({ width = "90" }: { width?: string }) => {
   return (

@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
-import superAdminImage from "./../../../public/superadmin.gif";
+import superAdminImage from "/public/superadmin.gif";
 
 const Admin = () => {
   return (

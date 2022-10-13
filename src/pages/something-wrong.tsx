@@ -3,7 +3,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import wentWrongImage from "./../../public/something-went-wrong.gif";
+import wentWrongImage from "/public/something-went-wrong.gif";
 
 const SomethingWrong = () => {
   return (

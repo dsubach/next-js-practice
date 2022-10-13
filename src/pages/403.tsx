@@ -3,7 +3,7 @@ import { Box, Container, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import forbiddenImage from "./../../public/forbidden.gif";
+import forbiddenImage from "/public/forbidden.gif";
 
 const NoAccess = () => {
   return (
