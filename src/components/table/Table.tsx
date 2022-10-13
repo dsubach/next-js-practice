@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
+import useTheme from "@mui/material/styles/useTheme";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,14 +14,11 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { ICharacter } from "types";
-import { Avatar, Chip, CircularProgress, TableHead } from "@mui/material";
-import { characterColumns } from "utils/columns";
+import { ITableRowData } from "types";
+import { Avatar, Chip, TableHead } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import moment from "moment";
 import useStyles from "./Table.styles";
-import Loader from "components/loader/Loader";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -106,11 +103,12 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 const rowsPerPage = 20;
 
 interface ITableProps {
-  data: ICharacter[];
+  data: ITableRowData[];
   count?: number;
   page: number;
   setPage: (newPage: number) => void;
   loading: boolean;
+  tableHead: string[];
 }
 export default function TableWithPagination({
   data,
@@ -118,6 +116,7 @@ export default function TableWithPagination({
   page,
   setPage,
   loading,
+  tableHead,
 }: ITableProps) {
   const classes = useStyles();
 
@@ -133,89 +132,57 @@ export default function TableWithPagination({
       <Table sx={{ minWidth: 500 }}>
         <TableHead>
           <TableRow>
-            {characterColumns.map((column) => (
+            {tableHead.map((text) => (
               <TableCell
-                key={column.key}
+                key={text}
                 sx={{
                   fontWeight: "500",
                   color: "#fff",
                   backgroundColor: "#5b0b6a",
                 }}
               >
-                {column.title}
+                {text}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {!loading &&
-            data.map((row) => (
-              <Link href={`/profile/${row.id}`} passHref key={row.id}>
-                <TableRow component="a" className={classes.tableRow}>
-                  <TableCell component="th" scope="row">
-                    <Avatar>
-                      <Image
-                        src={row.image}
-                        width={50}
-                        height={50}
-                        alt="avatar"
-                      />
-                    </Avatar>
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.origin.name}</TableCell>
-                  <TableCell>{row.location.name}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={row.status}
-                      color="primary"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={row.species}
-                      color="secondary"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={row.gender}
-                      color="success"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell width={100}>
-                    {row.type ? (
-                      <Chip
-                        label={row.type}
-                        color="warning"
-                        variant="outlined"
-                        size="small"
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </TableCell>
-                  <TableCell>{moment(row.created).fromNow(true)} ago</TableCell>
-                </TableRow>
-              </Link>
-            ))}
-          {loading && (
-            <TableRow style={{ height: 1460 }}>
-              <TableCell
-                colSpan={12}
-                align="center"
-                sx={{ verticalAlign: "baseline" }}
-              >
-                <Loader />
-              </TableCell>
-            </TableRow>
-          )}
+          {data.map((row) => (
+            <Link href={row.link} passHref key={row.id}>
+              <TableRow className={classes.tableRow}>
+                {row.cells.map((cell, idx) => {
+                  const isCheap = cell.isCheap;
+                  const isText = !cell.isImage && !isCheap;
+                  const key = `${cell.title} ${idx}`;
+                  return (
+                    <TableCell key={key}>
+                      <>
+                        {cell.isImage && cell.url && (
+                          <Avatar>
+                            <Image
+                              src={cell.url}
+                              width={50}
+                              height={50}
+                              alt="avatar"
+                            />
+                          </Avatar>
+                        )}
+                        {isCheap && (
+                          <Chip
+                            label={cell.title}
+                            color="secondary"
+                            variant="outlined"
+                            size="small"
+                          />
+                        )}
+                        {isText && cell.title}
+                      </>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </Link>
+          ))}
         </TableBody>
         <TableFooter>
           <TableRow>
