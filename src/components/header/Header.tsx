@@ -9,14 +9,32 @@ import { ROUTES } from "constants/routes";
 import { signOut, useSession } from "next-auth/react";
 import { ROLES } from "constants/roles";
 import { useRouter } from "next/router";
+import { GetServerSidePropsContext } from "next";
+import { initGetServerSideProps } from "shared/server";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "pages/api/auth/[...nextauth]";
 
 const navItems = [
   { title: "home", url: ROUTES.MAIN },
   { title: "locations", url: ROUTES.LOCATIONS },
 ];
 
+export const getServerSideProps = initGetServerSideProps(
+  async (ctx: GetServerSidePropsContext) => {
+    const session = await unstable_getServerSession(
+      ctx.req,
+      ctx.res,
+      authOptions
+    );
+    console.log(session);
+    return {
+      props: {},
+    };
+  }
+);
+
 export default function Header() {
-  const session = useSession();
+  const session = {};
   // @ts-ignore
   const { role } = session.data?.user || {};
   const { pathname } = useRouter();
