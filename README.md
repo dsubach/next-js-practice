@@ -2,6 +2,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+.env.local file:
+
+```
+NEXTAUTH_SECRET="secret"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
 First, run the development server:
 
 ```bash
